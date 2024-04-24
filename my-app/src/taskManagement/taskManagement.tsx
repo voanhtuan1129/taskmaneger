@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import dataDummy from "../dummy-data.json";
 import { Button, DatePicker, Form, FormInstance, Input, Modal } from "antd";
 import moment from "moment";
+import dayjs from 'dayjs';
 import { concat, filter, find, isEmpty, reduce } from "lodash";
 import {
   CollectionCreateFormModalProps,
@@ -124,6 +125,8 @@ const TaskManagement: React.FC = () => {
     onFormInstanceReady,
   }) => {
     const [form] = Form.useForm();
+    const startDate = Form.useWatch("startDate", { form, preserve: true });
+    const endDate = Form.useWatch("endDate", { form, preserve: true });
     useEffect(() => {
       onFormInstanceReady(form);
     }, []);
@@ -155,7 +158,7 @@ const TaskManagement: React.FC = () => {
           name="startDate"
           rules={[{ required: true, message: "Please input start date!" }]}
         >
-          <DatePicker format="YYYY/MM/DD" />
+          <DatePicker format="YYYY/MM/DD" maxDate={dayjs(endDate)} />
         </Form.Item>
 
         <Form.Item
@@ -163,7 +166,7 @@ const TaskManagement: React.FC = () => {
           name="endDate"
           rules={[{ required: true, message: "Please input end date!" }]}
         >
-          <DatePicker format="YYYY/MM/DD" />
+          <DatePicker format="YYYY/MM/DD" minDate={dayjs(startDate)} />
         </Form.Item>
       </Form>
     );
